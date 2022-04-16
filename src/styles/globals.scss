@@ -1,7 +1,38 @@
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  outline: 0;
+  text-decoration: none;
+  list-style: none;
 }
 
-// TODO
+:root {
+  --main-bg-color: brown;
+  --highlight: #ff57b2;
+  --heading: #f8f8f8;
+  --background: #1a1d23;
+  --info: #bbbbbb;
+  --body: #d7d7d7;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background-color: var(--background);
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+button,
+input {
+  font-family: 'Inter', sans-serif;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+}

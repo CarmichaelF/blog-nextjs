@@ -1,36 +1,45 @@
 import { GetStaticProps } from 'next';
+import { useState } from 'react';
+import { createClient } from '../../prismicio';
+import Header from '../components/Header';
+import { Post, PostList } from '../components/PostList';
 
-import { getPrismicClient } from '../services/prismic';
-
-import commonStyles from '../styles/common.module.scss';
-import styles from './home.module.scss';
-
-interface Post {
-  uid?: string;
-  first_publication_date: string | null;
-  data: {
-    title: string;
-    subtitle: string;
-    author: string;
-  };
-}
+import common from '../styles/common.module.scss';
 
 interface PostPagination {
-  next_page: string;
   results: Post[];
+  page: number;
 }
 
 interface HomeProps {
   postsPagination: PostPagination;
 }
 
-// export default function Home() {
-//   // TODO
-// }
+export default function Home({ postsPagination }: HomeProps): JSX.Element {
+  // TODO
+  const posts = postsPagination.results;
+  const [page, setPage] = useState(postsPagination.page);
 
-// export const getStaticProps = async () => {
-//   // const prismic = getPrismicClient();
-//   // const postsResponse = await prismic.query(TODO);
+  const handlePageChange = (newPage: number): void => {
+    setPage(newPage);
+  };
 
-//   // TODO
-// };
+  return (
+    <div className={common.container}>
+      <Header />
+      <PostList posts={posts} />
+    </div>
+  );
+}
+
+export const getStaticProps: GetStaticProps = async ({ previewData }) => {
+  const client = createClient({ previewData });
+
+  const postsPagination = await client.getByType('publication', {
+    // pageSize: 1,
+  });
+
+  return {
+    props: { postsPagination }, // Will be passed to the page component as props
+  };
+};
