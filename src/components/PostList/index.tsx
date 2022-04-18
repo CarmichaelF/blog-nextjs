@@ -1,3 +1,5 @@
+import { usePagination } from '../../contexts/paginationContext';
+import { LoadMore } from '../LoadMore';
 import { PostItem } from './PostItem';
 import styles from './styles.module.scss';
 
@@ -16,11 +18,14 @@ interface PostListProps {
 }
 
 export function PostList({ posts }: PostListProps): JSX.Element {
+  const { page, totalPages } = usePagination();
+
   return (
     <div className={styles.container}>
       {posts.map(post => (
         <PostItem key={post.id} {...post} />
       ))}
+      {page < totalPages && <LoadMore />}
     </div>
   );
 }
