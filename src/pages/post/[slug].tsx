@@ -1,44 +1,45 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
+import Header from '../../components/Header';
 
-import { getPrismicClient } from '../../services/prismic';
-
-import styles from './post.module.scss';
-
-interface Post {
-  first_publication_date: string | null;
-  data: {
-    title: string;
-    banner: {
-      url: string;
-    };
-    author: string;
-    content: {
-      heading: string;
-      body: {
-        text: string;
-      }[];
-    }[];
-  };
-}
+import { createClient } from '../../../prismicio';
+import { PostType } from '../../components/PostList';
+import PostBody from '../../components/PostBody';
 
 interface PostProps {
-  post: Post;
+  post: PostType;
 }
 
-// export default function Post() {
-//   // TODO
-// }
+export default function Post({ post }: PostProps): JSX.Element {
+  return (
+    <div>
+      <Header />
+      <PostBody post={post} />
+    </div>
+  );
+}
 
-// export const getStaticPaths = async () => {
-//   const prismic = getPrismicClient();
-//   const posts = await prismic.query(TODO);
+export const getStaticPaths: GetStaticPaths = async () => {
+  const client = createClient({});
 
-//   // TODO
-// };
+  const posts = (await client.getByType('publication')).results;
+  const slugs = posts.map(post => {
+    return { params: { slug: post.uid } };
+  });
+  return {
+    paths: slugs,
+    fallback: false,
+  };
+};
 
-// export const getStaticProps = async context => {
-//   const prismic = getPrismicClient();
-//   const response = await prismic.getByUID(TODO);
+export const getStaticProps: GetStaticProps = async ({
+  previewData,
+  params,
+}) => {
+  const { slug } = params;
+  const client = createClient({ previewData });
+  const post = await client.getByUID('publication', slug as string);
 
-//   // TODO
-// };
+  return {
+    props: { post }, // Will be passed to the page component as props
+  };
+};

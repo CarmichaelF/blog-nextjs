@@ -23,12 +23,12 @@
   align-items: center;
   gap: 24px;
   margin-top: 24px;
-}
 
-.bottom-section__text {
-  display: flex;
-  gap: 8px;
-  font-size: 0.875rem;
-  font-weight: 400;
-  color: var(--info);
+  &__text {
+    display: flex;
+    gap: 8px;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--info);
+  }
 }
